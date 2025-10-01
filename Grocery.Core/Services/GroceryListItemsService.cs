@@ -49,12 +49,43 @@ namespace Grocery.Core.Services
             return _groceriesRepository.Update(item);
         }
 
-        public List<BestSellingProducts> GetBestSellingProducts(int topX = 5)
+
+        public List<GroceryListItem> CalculateTotalSales()
+        {
+            var allProducts = _groceriesRepository.GetAll();
+            var mergedProducts = new List<GroceryListItem>();
+
+            // Group by ProductId and sum the amounts
+            var groupedProducts = allProducts
+                .GroupBy(item => item.ProductId)
+                .Select(group => new
+                {
+                    ProductId = group.Key,
+                    TotalAmount = group.Sum(item => item.Amount),
+                    FirstItem = group.First() 
+                });
+
+            foreach (var groupedProduct in groupedProducts)
+            {
+                var mergedProduct = new GroceryListItem(
+                    id: groupedProduct.FirstItem.Id,
+                    groceryListId: groupedProduct.FirstItem.GroceryListId,
+                    productId: groupedProduct.ProductId,
+                    amount: groupedProduct.TotalAmount
+                );
+                
+                mergedProducts.Add(mergedProduct);
+            }
+            
+            return mergedProducts;
+        }
+
+
+        public List<BestSellingProducts> ConvertProducts(List<GroceryListItem> groceryListItems)
         {
             var bestSellingProducts = new List<BestSellingProducts>();
-            var existingproducts = _groceriesRepository.GetAll();
             
-            foreach (GroceryListItem g in existingproducts)
+            foreach (GroceryListItem g in groceryListItems)
             {
                 var productamount = g.Amount;
                 var product = _productRepository.Get(g.ProductId);
@@ -72,8 +103,21 @@ namespace Grocery.Core.Services
                 }
             }
             
+            return bestSellingProducts;
+        }
+
+        public List<BestSellingProducts> GetBestSellingProducts(int topX = 5)
+        {
+            // Use CalculateTotalSales to get merged products
+            var mergedProducts = CalculateTotalSales();
+            
+            // Use the ConvertProducts method with merged data
+            var bestSellingProducts = ConvertProducts(mergedProducts);
+            
+            // Sort and take top X products
             bestSellingProducts = bestSellingProducts.OrderByDescending(p => p.NrOfSells).Take(topX).ToList();
             
+            // Assign rankings
             for (int i = 0; i < bestSellingProducts.Count; i++)
             {
                 bestSellingProducts[i].Ranking = i + 1;
