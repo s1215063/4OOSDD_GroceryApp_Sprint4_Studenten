@@ -1,23 +1,47 @@
-# GroceryApp sprint4 Studentversie  
+# GroceryApp sprint4
+
+Gitflow Workflow
+
+Voor dit project word er gebruik gemaakt van de Gitflow methode om de ontwikkeling gestructureerd en overzichtelijk te houden.
+
+Binnen Gitflow worden de volgende branches gebruikt:
+
+
+## main
+Bevat de stabiele, productierijpe code. Alles in deze branch is getest en klaar om in productie te gebruiken.
+
+
+## develop
+De integratiebranch waarin alle nieuwe features samengevoegd worden. Hier staat altijd de laatste werkende ontwikkelversie.
+
+
+## feature/…
+Voor iedere nieuwe user case of functionaliteit wordt een aparte feature branch aangemaakt.
+
+- feature/UC8 → voor de uitwerking van Use Case 8.
+- feature/UC9 → voor de uitwerking van Use Case 9.
+
+
+Zodra een feature klaar is, wordt deze terug samengevoegd in de develop branch.
+
+
+## release/…
+Wanneer een nieuwe versie bijna klaar is, wordt er een release branch aangemaakt vanuit develop. Hierin worden enkel nog documentatie-updates gedaan, zodat de release stabiel wordt.
+
+
+## hotfix/…
+ Voor dringende fouten in de main branch die snel opgelost moeten worden, zonder te wachten op een nieuwe release.
+
+
+    
 
 ## UC10 Productaantal in boodschappenlijst
-Aanpassingen zijn compleet.
+Productaantallen kunnen gewijzigd worden in de boodschappenlijst
 
 ## UC11 Meest verkochte producten
-Vereist aanvulling:  
-- Werk in GroceryListItemsService de methode GetBestSellingProducts uit.  
-- In BestSellingProductsView de kop van de tabel aanvullen met de gewenste kopregel boven de tabel. Daarnaast de inhoud van de tabel uitwerken.
+De top 5 meest populaire producten worden weergegeven onder "Meest verkocht"
 
 ## UC13 Klanten tonen per product  
-Deze UC toont de klanten die een bepaald product hebben gekocht:  
-- Maak enum Role met als waarden None en Admin.  
-- Geef de Client class een property Role metb als type de enum Role. De default waarde is None.  
-- In Client Repo koppel je de rol Role.Admin aan user3 (= admin).
-- In BoughtProductsService werk je de Get(productid) functie uit zodat alle Clients die product met productid hebben gekocht met client, boodschappenlijst en product in de lijst staan die wordt geretourneerd.  
-- In BoughtProductsView moet de naam van de Client ewn de naam van de Boodschappenlijst worden getoond in de CollectionView.  
-- In BoughtProductsViewModel de OnSelectedProductChanged uitwerken zodat bij een ander product de lijst correct wordt gevuld.  
-- In GroceryListViewModel maak je de methode ShowBoughtProducts(). Als de Client de rol admin heeft dan navigeer je naar BoughtProductsView. Anders doe je niets.  
-- In GroceryListView voeg je een ToolbarItem toe met als binding Client.Name en als Command ShowBoughtProducts.  
-
+Admins kunnen per product zien welke gebruikers deze gekocht hebben
 
   
